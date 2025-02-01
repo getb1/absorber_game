@@ -48,6 +48,7 @@ class Player(Creature):
 
     def __init__(self,x,y,image,  size):
         super().__init__(x,y,image, size)
+        
     
     def move(self):
         mouse_x = mouseX()
@@ -80,7 +81,7 @@ enemies = []
 for i in range(30):
     enemies.append(Creature(random.randint(0,SCREEN_SIZE_W),random.randint(0,SCREEN_SIZE_H), "Image_Files/sprite_0.png", random.randint(10,100)))
 
-player = Player(500,900,"Image_Files/sprite_4.png",100)
+player = Player(900,500,"Image_Files/sprite_4.png",100)
 
 while True:
     for e in enemies:
