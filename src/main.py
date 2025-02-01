@@ -25,17 +25,22 @@ class Creature(Character):
     def __init__(self,x,y,image,  size):
         super().__init__(x,y,image,size)
         
-        self.speed = random.uniform(1,0)
-        self.angle_deg = random.randint(0,360)
+        self.velocity_x = random.uniform(-1,1)
+        self.velocity_y = random.uniform(-1,1)
+        while self.velocity_x==0:
+            self.velocity_x = random.uniform(-1,1)
+        while self.velocity_y==0:
+            self.velocity_y = random.uniform(-1,1)
         
+        self.angle_deg = math.degrees(math.atan2(self.velocity_y,self.velocity_x))
         
         transformSprite(self.sprite, self.angle_deg,self.size/100)
 
     
     def move(self):
         
-        self.x = ((math.cos(math.radians(self.angle_deg))*self.speed)+self.x)%SCREEN_SIZE_W
-        self.y = ((math.sin(math.radians(self.angle_deg))*self.speed)+self.y)%SCREEN_SIZE_H
+        self.x = (self.x+self.velocity_x)%SCREEN_SIZE_W
+        self.y = (self.y+self.velocity_y)%SCREEN_SIZE_H
 
         moveSprite(self.sprite,self.x,self.y,centre=True)
 
@@ -51,10 +56,21 @@ class Player(Creature):
         diff_x = mouse_x-self.x
         diff_y = mouse_y-self.y
 
-        self.angle_deg = math.degrees(math.atan(diff_y/diff_x))
+        if diff_x != 0:
+            if diff_y !=0:
+                self.angle_deg = math.degrees(math.atan2(diff_y,diff_x))
+            else:
+                self.angle_deg = 00 if diff_x>0 else 180
+        else:
+            self.angle_deg = 90 if diff_y>0 else -90
+        
+        
+            
+
+        
 
 
-        transformSprite(self.sprite,self.angle_deg,self.size)
+        transformSprite(self.sprite,self.angle_deg,self.size/100)
 
 
 
