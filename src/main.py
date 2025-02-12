@@ -86,12 +86,12 @@ class Player(Creature):
         self.invulnerable = True
         self.invulnerability_period = 3000
         self.start = clock()
-        print(self.start)
+        
         moveSprite(self.sprite,SCREEN_SIZE_W//2,SCREEN_SIZE_H//2,True)
     
     def move(self,creatures):
 
-         
+        
         mouse_x = mouseX()
         mouse_y = mouseY()
 
@@ -121,7 +121,7 @@ class Player(Creature):
         
         
         transformSprite(self.sprite,self.angle_deg,self.size/100)
-        #super().move(False)
+        
 
         self.x=(self.x+self.velocity_x)%WORLD_SIZE
         self.y=(self.y+self.velocity_y)%WORLD_SIZE
@@ -131,7 +131,7 @@ class Player(Creature):
                 if self.size>=c.size:
                     
                     creatures.remove(c)
-                    self.size+=15
+                    self.size+=1
                     hideSprite(c.sprite)
                 elif self.size<c.size and not self.invulnerable:
 
@@ -152,29 +152,38 @@ def draw_boundary(player,fps,num):
 
 setAutoUpdate(False)
 enemies = []
-for i in range(150):
+for i in range(100):
     enemies.append(Creature(random.randint(0,WORLD_SIZE),random.randint(0,WORLD_SIZE), "Image_Files/sprite_0.png", random.randint(100,500)))
     enemies.append(Creature(random.randint(0,WORLD_SIZE),random.randint(0,WORLD_SIZE), "Image_Files/sprite_0.png", random.randint(1,100)))
+    enemies.append(Creature(random.randint(0,WORLD_SIZE),random.randint(0,WORLD_SIZE), "Image_Files/sprite_0.png", random.randint(1,20)))
     enemies[-1].add_images(["Image_Files/sprite_1.png","Image_Files/sprite_2.png","Image_Files/sprite_3.png"])
 
 player = Player(WORLD_SIZE//2,WORLD_SIZE//2,"Image_Files/sprite_4.png",50)
 FPS = 0
 
+
+
 fps_label=makeLabel(f"FPS:{FPS}",50,0,0,fontColour="white")
 enemies_label=makeLabel(f"Enemies:{len(enemies)}",50,0,50,fontColour="white")
 showLabel(fps_label)
+enemies[0].x=WORLD_SIZE//2 + 100
+enemies[0].y=WORLD_SIZE//2 + 100
 
 last = clock()
 while True:
 
+    
+
     for e in enemies:
         
         e.move(player)
+
+    
     tick(24)
     time_taken=clock()-last
     
     last=clock()
-    print(time_taken)
+    
     draw_boundary(player,round(1/(time_taken/1000)),len(enemies))
     updateDisplay()
     if not player.move(enemies):
